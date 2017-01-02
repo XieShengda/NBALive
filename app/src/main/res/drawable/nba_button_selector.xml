@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" android:drawable="@drawable/nba_icon"/>
+    <item android:state_pressed="true">
+        <layer-list>
+            <item android:drawable="@drawable/nba_icon"
+                android:top="2dp"
+                android:left="2dp"/>
+        </layer-list>
+    </item>
+
+</selector>

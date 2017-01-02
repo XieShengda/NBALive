@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/image_logo"
         android:text="@string/app_name"
+        android:textStyle="bold"
         android:textColor="@color/colorTextOrIcons"
         android:textSize="18sp" />
     <TextView
@@ -27,6 +28,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="18sp"
         android:textColor="@color/colorTextOrIcons"
+        android:background="@drawable/title_bg"
         android:id="@+id/page"/>
 
 </RelativeLayout>

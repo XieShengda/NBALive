@@ -2,34 +2,43 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <include layout="@layout/title_bar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/title_bar" />
+
+        <include
+            android:id="@+id/tab_bar"
+            layout="@layout/tab_bar" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@id/tab_bar"
+            android:background="@color/colorDivider"
+            android:id="@+id/tab_bar_shadow"/>
+
         <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/fragment_container">
-        </FrameLayout>
-        <include layout="@layout/tab_bar" />
+            android:layout_above="@id/tab_bar_shadow"
+            android:layout_below="@id/title_bar" />
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/web_button"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/nba_button_selector"
+            />
 
-    <FrameLayout
-        android:id="@+id/bg_wel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+    </RelativeLayout>
 
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/nba_image"
-            android:id="@+id/wel_img"/>
-    </FrameLayout>
+    <include layout="@layout/wel_page" />
 
 </FrameLayout>

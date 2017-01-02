@@ -6,179 +6,183 @@
 
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="14dp"
-        android:background="@color/colorDivider"
-        android:alpha=".2"
-        android:id="@+id/textView" />
+        android:background="@color/colorDivider" />
 
     <!--GameDate-->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:id="@+id/title"
-        android:text="01-24 周日"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:textSize="14sp"
-        android:textColor="@color/colorPrimary"
         android:background="@color/colorTextOrIcons"
-        android:visibility="gone" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/date_bg"
+            android:gravity="center"
+            android:text="01-24 周日"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:background="@color/colorTextOrIcons"
         android:padding="8dp">
         <!--LOGO-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/team1_logo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:scaleType="fitCenter"
-                android:id="@+id/team1_logo"
-                android:src="@drawable/huren"/>
+                android:src="@drawable/huren" />
 
             <TextView
+                android:id="@+id/team1_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/team1_name"
-                android:textSize="14sp"
                 android:text="湖人"
-                android:textColor="@color/colorPrimaryText"/>
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/team2_logo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:scaleType="fitCenter"
-                android:id="@+id/team2_logo"
-                android:src="@drawable/kaierteren"/>
+                android:src="@drawable/kaierteren" />
 
             <TextView
+                android:id="@+id/team2_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/team2_name"
-                android:textSize="14sp"
                 android:text="凯尔特人"
-                android:textColor="@color/colorPrimaryText"/>
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <!--Time-->
 
         <TextView
+            android:id="@+id/center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:id="@+id/center"
             android:text="VS"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/game_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/game_time"
-            android:text="12/07 08:30"
-            android:textSize="12sp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/colorSecondaryText"
             android:layout_above="@+id/center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dp"
+            android:text="12/07 08:30"
+            android:textColor="@color/colorSecondaryText"
 
-            android:layout_centerHorizontal="true" />
+            android:textSize="12sp" />
 
         <!--比分-->
 
         <TextView
+            android:id="@+id/team2_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/center"
             android:layout_centerVertical="true"
-            android:id="@+id/team2_score"
-            android:text="00"
             android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/center"
+            android:text="00"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <TextView
+            android:id="@+id/team1_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/team1_score"
-            android:text="00"
-            android:layout_marginRight="40dp"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="22sp"
             android:layout_alignBottom="@+id/center"
             android:layout_alignStart="@+id/linearLayout2"
-            android:layout_marginStart="25dp" />
-
-
+            android:layout_marginRight="40dp"
+            android:layout_marginStart="25dp"
+            android:text="00"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="22sp" />
 
 
         <!--GameState-->
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/linearLayout2">
+            android:gravity="center">
 
             <Button
+                android:id="@+id/watch_way"
                 android:layout_width="80dp"
                 android:layout_height="32dp"
                 android:background="@color/colorTextOrIcons"
                 android:text="视频集锦"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
-                android:id="@+id/watch_way"
 
                 />
 
             <TextView
+                android:id="@+id/game_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/state_bg_0"
                 android:text="未开赛"
                 android:textColor="@color/colorTextOrIcons"
-                android:background="@drawable/state_bg_0"
-                android:textSize="12sp"
-                android:id="@+id/game_state" />
+                android:textSize="12sp" />
 
             <Button
+                android:id="@+id/game_tech"
                 android:layout_width="80dp"
                 android:layout_height="32dp"
                 android:background="@color/colorTextOrIcons"
                 android:text="技术统计"
                 android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
-                android:id="@+id/game_tech"
-                />
+                android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="2dp"
-    android:background="@color/colorDivider"
-    android:alpha=".4"/>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorShadow" />
 
 
 </LinearLayout>
