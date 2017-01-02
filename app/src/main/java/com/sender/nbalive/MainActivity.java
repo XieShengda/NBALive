@@ -24,20 +24,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener, View.OnTouchListener {
-    private ImageButton gameListButton, webButton, bbsButton, accountButton;
+    private ImageButton gameListButton, topButton, webButton, bbsButton, accountButton;
     private ImageView welImg;
     private TextView page;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private ContentFragment fragmentContent;
-    private WebFragment fragmentLive, fragmentBbs;
-    private WebView webLive, webBbs;
+    private WebFragment fragmentTop, fragmentLive, fragmentBbs;
+    private WebView webTop, webLive, webBbs;
     private int currentSelect;
     private boolean isExit = false;
     private float startX, startY, endX, endY;
     private long startTime, endTime;
     private final String liveUrl = "http://espnzhibo.com/schedule/nba";
-    private final String bbsUrl = "http://espnzhibo.com/schedule/nba";
+    private final String bbsUrl = "https://m.hupu.com/bbs";
+    private final String topUrl = "https://m.hupu.com/nba/standings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //  初始化控件
     private void initView() {
         gameListButton = (ImageButton) findViewById(R.id.game_list_button);
+        topButton = (ImageButton) findViewById(R.id.top_button);
         webButton = (ImageButton) findViewById(R.id.web_button);
         bbsButton = (ImageButton) findViewById(R.id.bbs_button);
         accountButton = (ImageButton) findViewById(R.id.account_button);
@@ -62,10 +64,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         fragmentContent = new ContentFragment();
+        fragmentTop = WebFragment.getInstance(topUrl);
         fragmentLive = WebFragment.getInstance(liveUrl);
         fragmentBbs = WebFragment.getInstance(bbsUrl);
 
         transaction.add(R.id.fragment_container, fragmentContent);
+        transaction.add(R.id.fragment_container,fragmentTop);
         transaction.add(R.id.fragment_container, fragmentLive);
         transaction.add(R.id.fragment_container, fragmentBbs);
         transaction.commit();
@@ -101,6 +105,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //  设置监听器
     private void initEvent() {
         gameListButton.setOnClickListener(this);
+        topButton.setOnClickListener(this);
         webButton.setOnClickListener(this);
         bbsButton.setOnClickListener(this);
         accountButton.setOnClickListener(this);
@@ -120,11 +125,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case 1:
                 reset();
                 hideAllFrag();
-                webButton.setImageResource(R.drawable.web_pressed);
+                topButton.setImageResource(R.drawable.top_pressed);
+                page.setText("球队排名");
+                transaction.show(fragmentTop);
+                break;
+
+            case 2:
+                reset();
+                hideAllFrag();
                 page.setText("直播");
                 transaction.show(fragmentLive);
                 break;
-            case 2:
+            case 3:
                 reset();
                 hideAllFrag();
                 bbsButton.setImageResource(R.drawable.bbs_pressed);
@@ -142,7 +154,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //  将所有Tab按钮设置成灰色
     private void reset() {
         gameListButton.setImageResource(R.drawable.game_list_normal);
-        webButton.setImageResource(R.drawable.web_normal);
+        topButton.setImageResource(R.drawable.top_normal);
         bbsButton.setImageResource(R.drawable.bbs_normal);
         accountButton.setImageResource(R.drawable.account_normal);
     }
@@ -151,6 +163,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void hideAllFrag() {
         if (fragmentContent != null) {
             transaction.hide(fragmentContent);
+        }
+        if (fragmentTop != null){
+            transaction.hide(fragmentTop);
         }
         if (fragmentLive != null) {
             transaction.hide(fragmentLive);
@@ -191,21 +206,32 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     setSelect(0);
                 }
                 break;
-            case R.id.web_button:
+            case R.id.top_button:
                 if (currentSelect != 1) {
+                    webTop = fragmentTop.getWebView();
+                    webTop.setOnTouchListener(this);
+                    setSelect(1);
+                }else {
+                    fragmentTop.refresh();
+                    webTop.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
+                }
+                break;
+
+            case R.id.web_button:
+                if (currentSelect != 2) {
                     webLive = fragmentLive.getWebView();
                     webLive.setOnTouchListener(this);
-                    setSelect(1);
+                    setSelect(2);
                 }else {
                     fragmentLive.refresh();
                     webLive.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
                 }
                 break;
             case R.id.bbs_button:
-                if (currentSelect != 2){
+                if (currentSelect != 3){
                     webBbs = fragmentBbs.getWebView();
                     webBbs.setOnTouchListener(this);
-                    setSelect(2);
+                    setSelect(3);
                 }else {
                     fragmentBbs.refresh();
                     webBbs.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
@@ -225,15 +251,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 case 0:
                     dblClickExit();
                     break;
-
                 case 1:
+                    if (webTop.canGoBack()){
+                        webTop.goBack();
+                    } else {
+                        dblClickExit();
+                    }
+                case 2:
                     if (webLive.canGoBack()) {
                         webLive.goBack();
                     } else {
                         dblClickExit();
                     }
                     break;
-                case 2:
+                case 3:
                     if (webBbs.canGoBack()) {
                         webBbs.goBack();
                     } else {
