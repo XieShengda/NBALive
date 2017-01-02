@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:background="@color/colorDivider"
+        android:alpha=".2"
+        android:id="@+id/textView" />
+
+    <!--GameDate-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:id="@+id/title"
+        android:text="01-24 周日"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/colorTextOrIcons"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="8dp">
+        <!--LOGO-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="fitCenter"
+                android:id="@+id/team1_logo"
+                android:src="@drawable/huren"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/team1_name"
+                android:textSize="14sp"
+                android:text="湖人"
+                android:textColor="@color/colorPrimaryText"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="fitCenter"
+                android:id="@+id/team2_logo"
+                android:src="@drawable/kaierteren"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/team2_name"
+                android:textSize="14sp"
+                android:text="凯尔特人"
+                android:textColor="@color/colorPrimaryText"/>
+
+        </LinearLayout>
+
+        <!--Time-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/center"
+            android:text="VS"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/game_time"
+            android:text="12/07 08:30"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_above="@+id/center"
+
+            android:layout_centerHorizontal="true" />
+
+        <!--比分-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/center"
+            android:layout_centerVertical="true"
+            android:id="@+id/team2_score"
+            android:text="00"
+            android:layout_marginLeft="40dp"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/team1_score"
+            android:text="00"
+            android:layout_marginRight="40dp"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="22sp"
+            android:layout_alignBottom="@+id/center"
+            android:layout_alignStart="@+id/linearLayout2"
+            android:layout_marginStart="25dp" />
+
+
+
+
+        <!--GameState-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/linearLayout2">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:background="@color/colorTextOrIcons"
+                android:text="视频集锦"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                android:id="@+id/watch_way"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="未开赛"
+                android:textColor="@color/colorTextOrIcons"
+                android:background="@drawable/state_bg_0"
+                android:textSize="12sp"
+                android:id="@+id/game_state" />
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:background="@color/colorTextOrIcons"
+                android:text="技术统计"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                android:id="@+id/game_tech"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/colorDivider"
+    android:alpha=".4"/>
+
+
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_bar"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/fragment_container">
+        </FrameLayout>
+        <include layout="@layout/tab_bar" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/bg_wel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/nba_image"
+            android:id="@+id/wel_img"/>
+    </FrameLayout>
+
+</FrameLayout>
