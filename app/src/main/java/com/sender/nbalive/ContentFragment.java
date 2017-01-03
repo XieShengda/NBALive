@@ -33,6 +33,7 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+                //接收dataLoader返回的list
                 List<GameBean> list = (List<GameBean>) msg.obj;
                 if (adapter == null) {
                     adapter = new GameAdapter(getActivity(),list);

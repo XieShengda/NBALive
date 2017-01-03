@@ -95,6 +95,8 @@ public class DataLoader {
                     gameBean.time = trItem.getString("time");
                     gameBeanList.add(gameBean);
                 }
+
+//                将处理成list的Json数据返回给主线程
                 Message message = Message.obtain();
                 message.obj = gameBeanList;
                 handler.sendMessage(message);

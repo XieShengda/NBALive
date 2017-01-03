@@ -27,23 +27,31 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
 
     @Override
     public GameAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //给自定义ViewHolder传入参数item布局
         return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.game_item, parent, false));
     }
 
+//    将数据适配到UI
     @Override
     public void onBindViewHolder(final GameAdapter.MyViewHolder holder, int position) {
         final GameBean gameBean = list.get(position);
+        //如果获取了当日日期，则将日期的View显示出来，否则隐藏
         if (gameBean.title != null){
             TextView title = holder.title;
             title.setVisibility(View.VISIBLE);
             title.setText(gameBean.title);
+        }else{
+            holder.title.setVisibility(View.GONE);
         }
+        //设置队伍名
         String team1Name, team2Name, state;
         team1Name = gameBean.team1Name;
         team2Name = gameBean.team2Name;
         holder.team1Name.setText(team1Name);
         holder.team2Name.setText(team2Name);
+        //根据队伍名设置Logo图片
         setLogo(holder, team1Name, team2Name);
+        //根据比赛状态显示不同的颜色和文字信息
         state = gameBean.state;
         String[] score = gameBean.score.split("-");
         switch (state){
@@ -95,6 +103,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
         return list.size();
     }
 
+//    自定义ViewHolder
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView team1Logo, team2Logo;
@@ -118,7 +127,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
         }
 
     }
-
+//根据API返回的队伍名为ImageView设置队伍Logo
     private void setLogo(MyViewHolder holder, String team1Name, String team2Name) {
         switch (team1Name){
             case "凯尔特人":

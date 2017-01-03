@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+
 
 /**
  * Created by XieShengda on 2016/12/28.
@@ -31,6 +34,12 @@ public class WebFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_web, container, false);
+        initWebView(view);
+
+        return view;
+    }
+
+    private void initWebView(View view) {
         webView = (WebView) view.findViewById(R.id.web_view);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -44,7 +53,14 @@ public class WebFragment extends Fragment {
             }
         });
 
-        return view;
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public View getVideoLoadingProgressView() {
+                FrameLayout frameLayout = new FrameLayout(getActivity());
+                frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                return frameLayout;
+            }
+        });
     }
 
     public static WebFragment getInstance(String urlString){
@@ -58,6 +74,7 @@ public class WebFragment extends Fragment {
     public WebView getWebView() {
         return webView;
     }
+
 
     public void refresh(){
         webView.loadUrl(urlString);
