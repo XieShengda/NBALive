@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private boolean isExit = false;
     private float startX, startY, endX, endY;
     private long startTime, endTime;
-    private final String liveUrl = "http://espnzhibo.com/schedule/nba";
+    private final String liveUrl = "http://nba.tmiaoo.com/nba.html";
     private final String bbsUrl = "https://m.hupu.com/bbs";
     private final String topUrl = "https://m.hupu.com/nba/standings";
 

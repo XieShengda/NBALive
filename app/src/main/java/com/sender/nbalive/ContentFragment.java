@@ -22,7 +22,7 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private DataLoader dataLoader;
-    private Handler handler;
+    private Handler handler, handler1;
     private GameAdapter adapter;
     private final String DATA_URL = "http://api.avatardata.cn/Nba/NomalRace?key=4088c2836e424814b06ae1648c85b608";
 
@@ -36,13 +36,20 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 //接收dataLoader返回的list
                 List<GameBean> list = (List<GameBean>) msg.obj;
                 if (adapter == null) {
-                    adapter = new GameAdapter(getActivity(),list);
+                    adapter = new GameAdapter(getActivity(),list, handler1);
                     recyclerView.setAdapter(adapter);
+
                 } else {
                     adapter.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
                 }
 
+            }
+        };
+        handler1 = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                recyclerView.smoothScrollToPosition((Integer) msg.obj);
             }
         };
         recyclerView = (RecyclerView) view.findViewById(R.id.game_view);

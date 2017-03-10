@@ -3,6 +3,8 @@ package com.sender.nbalive;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +20,14 @@ import java.util.List;
  */
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
     private Context context;
-    private  List<GameBean> list;
+    private List<GameBean> list;
+    private boolean isCurrent = true;
+    private Handler mHandler;
 
-    public GameAdapter(Context context, List<GameBean> list) {
+    public GameAdapter(Context context, List<GameBean> list, Handler handler) {
         this.context = context;
         this.list = list;
+        mHandler = handler;
     }
 
     @Override
@@ -60,12 +65,24 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
                 holder.state.setBackground(context.getResources().getDrawable(R.drawable.state_bg_0));
                 holder.team1Score.setText("00");
                 holder.team2Score.setText("00");
+                if (isCurrent){
+                    Message message = mHandler.obtainMessage();
+                    message.obj = position;
+                    mHandler.sendMessage(message);
+                    isCurrent = false;
+                }
                 break;
             case GameBean.IN_GAME:
                 holder.state.setText("比赛中");
                 holder.team1Score.setText(score[0]);
                 holder.state.setBackground(context.getResources().getDrawable(R.drawable.state_bg_1));
                 holder.team2Score.setText(score[1]);
+                if (isCurrent){
+                    Message message = mHandler.obtainMessage();
+                    message.obj = position;
+                    mHandler.sendMessage(message);
+                    isCurrent = false;
+                }
                 break;
             case GameBean.GAME_OVER:
                 holder.state.setText("已结束");
