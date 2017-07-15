@@ -1,11 +1,11 @@
 package com.sender.nbalive;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -20,23 +20,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener, View.OnTouchListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
     private ImageButton gameListButton, topButton, webButton, bbsButton, accountButton;
     private ImageView welImg;
     private TextView page;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction transaction;
+    private ViewPager fragmentContainer;
+    private List<Fragment> fragmentList;
     private ContentFragment fragmentContent;
-    private WebFragment fragmentTop, fragmentLive, fragmentBbs;
+    private NewsFragment fragmentNews;
+    private WebFragment fragmentLive, fragmentBbs;
     private WebView webTop, webLive, webBbs;
     private int currentSelect;
     private boolean isExit = false;
-    private float startX, startY, endX, endY;
-    private long startTime, endTime;
-    private final String liveUrl = "http://nba.tmiaoo.com/nba.html";
+    //    private float startX, startY, endX, endY;
+//    private long startTime, endTime;
+    private final String liveUrl = "http://nba.tmiaoo.com/ipad.html";
     private final String bbsUrl = "https://m.hupu.com/bbs";
     private final String topUrl = "https://m.hupu.com/nba/standings";
 
@@ -45,6 +48,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        fragmentList = new ArrayList<>();
         initView();
         initEvent();
         setSelect(0);
@@ -53,6 +57,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     //  初始化控件
     private void initView() {
+        fragmentContainer = (ViewPager) findViewById(R.id.fragment_container);
         gameListButton = (ImageButton) findViewById(R.id.game_list_button);
         topButton = (ImageButton) findViewById(R.id.top_button);
         webButton = (ImageButton) findViewById(R.id.web_button);
@@ -61,18 +66,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         page = (TextView) findViewById(R.id.page);
         welImg = (ImageView) findViewById(R.id.wel_img);
         //初始化Fragment
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
         fragmentContent = new ContentFragment();
-        fragmentTop = WebFragment.getInstance(topUrl);
+//        fragmentTop = WebFragment.getInstance(topUrl);
+        fragmentNews = NewsFragment.getInstance(0);
         fragmentLive = WebFragment.getInstance(liveUrl);
         fragmentBbs = WebFragment.getInstance(bbsUrl);
+        fragmentList.add(fragmentContent);
+//        fragmentList.add(fragmentTop);
+        fragmentList.add(fragmentNews);
+        fragmentList.add(fragmentLive);
+        fragmentList.add(fragmentBbs);
+        fragmentContainer.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
 
-        transaction.add(R.id.fragment_container, fragmentContent);
-        transaction.add(R.id.fragment_container,fragmentTop);
-        transaction.add(R.id.fragment_container, fragmentLive);
-        transaction.add(R.id.fragment_container, fragmentBbs);
-        transaction.commit();
+            @Override
+            public int getCount() {
+                return fragmentList.size();
+            }
+        });
+
 
         final FrameLayout welBg = (FrameLayout) findViewById(R.id.bg_wel);
         hideWel(welBg);
@@ -109,45 +124,69 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         webButton.setOnClickListener(this);
         bbsButton.setOnClickListener(this);
         accountButton.setOnClickListener(this);
+        fragmentContainer.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setSelect(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+//        webTop.setOnTouchListener(this);
+//        webLive.setOnTouchListener(this);
+//        webBbs.setOnTouchListener(this);
+
     }
 
     //  选择显示的页面
     private void setSelect(int i) {
-        transaction = fragmentManager.beginTransaction();
         switch (i) {
+
             case 0:
                 reset();
-                hideAllFrag();
                 gameListButton.setImageResource(R.drawable.game_list_pressed);
                 page.setText("赛程");
-                transaction.show(fragmentContent);
                 break;
             case 1:
                 reset();
-                hideAllFrag();
                 topButton.setImageResource(R.drawable.top_pressed);
-                page.setText("球队排名");
-                transaction.show(fragmentTop);
+                page.setText("新闻");
+//                page.setText("球队排名");
+//                if (webTop == null) {
+//                    webTop = fragmentTop.getWebView();
+//                }
                 break;
 
             case 2:
                 reset();
-                hideAllFrag();
                 page.setText("直播");
-                transaction.show(fragmentLive);
+                if (webLive == null) {
+                    webLive = fragmentLive.getWebView();
+                }
+
                 break;
             case 3:
                 reset();
-                hideAllFrag();
+
                 bbsButton.setImageResource(R.drawable.bbs_pressed);
                 page.setText("论坛");
-                transaction.show(fragmentBbs);
+                if (webBbs == null) {
+                    webBbs = fragmentBbs.getWebView();
+                }
                 break;
 
 
         }
 
-        transaction.commit();
         currentSelect = i;
     }
 
@@ -159,21 +198,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         accountButton.setImageResource(R.drawable.account_normal);
     }
 
-    //  隐藏所有Fragment
-    private void hideAllFrag() {
-        if (fragmentContent != null) {
-            transaction.hide(fragmentContent);
-        }
-        if (fragmentTop != null){
-            transaction.hide(fragmentTop);
-        }
-        if (fragmentLive != null) {
-            transaction.hide(fragmentLive);
-        }
-        if (fragmentBbs != null){
-            transaction.hide(fragmentBbs);
-        }
-    }
 
     //  获取欢迎页面动画
     private AnimationSet getOutSet() {
@@ -203,36 +227,35 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.game_list_button:
                 if (currentSelect != 0) {
+                    fragmentContainer.setCurrentItem(0, true);
                     setSelect(0);
                 }
                 break;
             case R.id.top_button:
                 if (currentSelect != 1) {
-                    webTop = fragmentTop.getWebView();
-                    webTop.setOnTouchListener(this);
+                    fragmentContainer.setCurrentItem(1, true);
                     setSelect(1);
-                }else {
-                    fragmentTop.refresh();
-                    webTop.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
+//                } else {
+//                    fragmentTop.refresh();
+//                    webTop.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
                 }
                 break;
-
             case R.id.web_button:
                 if (currentSelect != 2) {
-                    webLive = fragmentLive.getWebView();
-                    webLive.setOnTouchListener(this);
+                    fragmentContainer.setCurrentItem(2, true);
                     setSelect(2);
-                }else {
+                } else {
                     fragmentLive.refresh();
                     webLive.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
                 }
                 break;
             case R.id.bbs_button:
-                if (currentSelect != 3){
-                    webBbs = fragmentBbs.getWebView();
-                    webBbs.setOnTouchListener(this);
+                if (currentSelect != 3) {
+
+                    fragmentContainer.setCurrentItem(3, true);
+
                     setSelect(3);
-                }else {
+                } else {
                     fragmentBbs.refresh();
                     webBbs.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_refresh));
                 }
@@ -252,11 +275,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     dblClickExit();
                     break;
                 case 1:
-                    if (webTop.canGoBack()){
-                        webTop.goBack();
-                    } else {
+//                    if (webTop.canGoBack()) {
+//                        webTop.goBack();
+//                    } else {
                         dblClickExit();
-                    }
+//                    }
+                    break;
                 case 2:
                     if (webLive.canGoBack()) {
                         webLive.goBack();
@@ -275,7 +299,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         return false;
     }
-//  双击返回键退出
+
+    //  双击返回键退出
     private void dblClickExit() {
         if (!isExit) {
             isExit = true;
@@ -293,33 +318,33 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    //  设置webView右划返回
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        WebView webView = (WebView) view;
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    startX = motionEvent.getX();
-                    startY = motionEvent.getY();
-                    startTime = System.currentTimeMillis();
-
-                    break;
-                case MotionEvent.ACTION_UP:
-                    endX = motionEvent.getX();
-                    endY = motionEvent.getY();
-                    endTime = System.currentTimeMillis();
-                    if (endX - startX > 200 && endTime - startTime < 500) {
-                        final int limitY = 50;
-                        if (endY > startY && endY - startY < limitY || endY < startY && startY - endY < limitY) {
-                            if (webView.canGoBack()) {
-                                webView.goBack();
-                            }
-                        }
-                    }
-                    break;
-            }
-        return false;
-    }
+//    //  设置webView右划返回
+//    @Override
+//    public boolean onTouch(View view, MotionEvent motionEvent) {
+//        WebView webView = (WebView) view;
+//            switch (motionEvent.getAction()) {
+//                case MotionEvent.ACTION_DOWN:
+//                    startX = motionEvent.getX();
+//                    startY = motionEvent.getY();
+//                    startTime = System.currentTimeMillis();
+//
+//                    break;
+//                case MotionEvent.ACTION_UP:
+//                    endX = motionEvent.getX();
+//                    endY = motionEvent.getY();
+//                    endTime = System.currentTimeMillis();
+//                    if (endX - startX > 200 && endTime - startTime < 500) {
+//                        final int limitY = 50;
+//                        if (endY > startY && endY - startY < limitY || endY < startY && startY - endY < limitY) {
+//                            if (webView.canGoBack()) {
+//                                webView.goBack();
+//                            }
+//                        }
+//                    }
+//                    break;
+//            }
+//        return false;
+//    }
 
 
 }

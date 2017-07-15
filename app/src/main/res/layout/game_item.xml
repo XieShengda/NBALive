@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/item_view"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -28,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
-        app:cardElevation="3dp"
-        app:cardCornerRadius="3dp">
+        app:cardElevation="2dp"
+        app:cardCornerRadius="2dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"

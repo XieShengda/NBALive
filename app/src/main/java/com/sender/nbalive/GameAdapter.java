@@ -6,28 +6,48 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by XieShengda on 2016/12/28.
  */
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
+    private static final String TAG = "GameAdapter";
     private Context context;
     private List<GameBean> list;
     private boolean isCurrent = true;
     private Handler mHandler;
+    private int todayPosition = -1;
+    
 
     public GameAdapter(Context context, List<GameBean> list, Handler handler) {
         this.context = context;
         this.list = list;
         mHandler = handler;
+        for (int i = 0; i < list.size(); i++){
+            GameBean bean = list.get(i);
+            if (bean.title != null){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+                Date date = new Date();
+                String today = simpleDateFormat.format(date);
+                String titleDate = bean.title.substring(0, 5);
+                Log.d(TAG, "today:"+ today + ",titleDate:" + titleDate);
+                if (titleDate.equals(today)){
+                    todayPosition = i;
+                }
+            }
+        }
     }
 
     @Override
@@ -35,6 +55,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
         //给自定义ViewHolder传入参数item布局
         return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.game_item, parent, false));
     }
+
 
 //    将数据适配到UI
     @Override
@@ -99,19 +120,34 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
             public void onClick(View view) {
                 Uri uri = null;
                 switch (view.getId()){
-                    case R.id.watch_way:
-                        uri = Uri.parse(gameBean.watchWayUrl);
+                    case R.id.item_view:
+                        String wwu = gameBean.watchWayUrl;
+                        if (!wwu.equals("")) {
+                            uri = Uri.parse(wwu);
+                            Log.d(TAG, uri.toString());
+                            if (uri != null) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                context.startActivity(intent);
+                            }
+                        } else {
+                            Toast.makeText(context, "暂无直播或集锦", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case R.id.game_tech:
-                        uri = Uri.parse(gameBean.techUrl);
+                        String tu = gameBean.techUrl;
+                        if (!tu.equals("")) {
+                            Intent intent = new Intent(context, WebActivity.class);
+                            intent.putExtra("target_url",tu);
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, "暂无技术统计", Toast.LENGTH_SHORT).show();
+                        }
                         break;
 
                 }
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                context.startActivity(intent);
             }
         };
-        watchWay.setOnClickListener(listener);
+        holder.itemView.setOnClickListener(listener);
         holder.tech.setOnClickListener(listener);
     }
 
@@ -126,8 +162,10 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
         ImageView team1Logo, team2Logo;
         TextView title, team1Name, team2Name, team1Score, team2Score, time, state;
         Button watchWay, tech;
+        View itemView;
         public MyViewHolder(View view){
             super(view);
+            itemView = view;
             team1Logo = (ImageView) view.findViewById(R.id.team1_logo);
             team2Logo = (ImageView) view.findViewById(R.id.team2_logo);
             title = (TextView) view.findViewById(R.id.title);
@@ -164,6 +202,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
                 break;
             case "公牛":
                 holder.team1Logo.setImageResource(R.drawable.gongniu);
+                break;
             case "骑士":
                 holder.team1Logo.setImageResource(R.drawable.qishi);
                 break;
@@ -236,6 +275,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
             case "国王":
                 holder.team1Logo.setImageResource(R.drawable.guowang);
                 break;
+            default:
+                holder.team1Logo.setImageResource(R.drawable.nba_icon);
 
 
         }
@@ -257,6 +298,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
                 break;
             case "公牛":
                 holder.team2Logo.setImageResource(R.drawable.gongniu);
+                break;
             case "骑士":
                 holder.team2Logo.setImageResource(R.drawable.qishi);
                 break;
@@ -329,8 +371,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.MyViewHolder>{
             case "国王":
                 holder.team2Logo.setImageResource(R.drawable.guowang);
                 break;
-
+            default:
+                holder.team1Logo.setImageResource(R.drawable.nba_icon);
 
         }
+    }
+
+    public int getTodayPosition() {
+        return todayPosition;
     }
 }

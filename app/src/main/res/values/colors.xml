@@ -10,4 +10,5 @@
     <color name="colorDivider">#EEEEEE</color>
     <color name="colorShadow">#E0E0E0</color>
     <color name="colorGary">#BDBDBD</color>
+    <color name="colorBackground">#FAFAFA</color>
 </resources>
